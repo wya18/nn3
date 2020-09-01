@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{tikz}
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\title{\textbf{Big Data in Experimental Physics: NN}}
+\author{TAs}
+
+\begin{document}
+\maketitle
+
+\section{Back propagation}
+
+As \texttt{README.md} has explained, the computation process is
+
+\begin{align*}
+  v^{(1)}&=W^{(1)}v^{(0)}\\
+  v^{(2)}&=\text{ReLU}(v^{(1)})\\
+  v^{(3)}&=W^{(2)}v^{(2)}
+\end{align*}
+
+The loss is computed in the following way
+\begin{align*}
+  E&=\frac{1}{2}\sum_{i}(v^{(3)}_i-y_i)^2
+\end{align*}
+
+\newcommand{\pfrac}[2]{\frac{\partial #1}{\partial #2}}
+
+To minimize the loss, we can use derivative to update the weights as $E$ is a function of all weights. The gradient for all the weights can be obtained in a way similar to the following process.
+\begin{align*}
+  \pfrac{E}{v^{(3)}_i}&=v^{(3)}_i-y_i\\
+  \pfrac{E}{W^{(2)}_{i,j}}\
+  &=\pfrac{E}{v^{(3)}_i}\pfrac{v^{(3)}_i}{W^{(2)}_{i,j}}\\
+  &=\pfrac{E}{v^{(3)}_i}v^{(2)}_j\\
+  \pfrac{E}{v^{(2)}_j}
+  &=\sum_i\pfrac{E}{v^{(3)}_i}\pfrac{v^{(3)}_i}{v^{(2)}_{j}}\\
+  &=\sum_i\pfrac{E}{v^{(3)}_i}W^{(2)}_{i,j}\\
+\end{align*}
+
+As for the ReLU function,
+\begin{align*}
+  \pfrac{v^{(2)}_i}{v^{(1)}_i}
+  &=\left\{
+    \begin{array}{ll}
+      1 & v^{(1)}_i>0\\
+      0 & v^{(1)}_i\leq 0
+    \end{array}
+    \right.
+\end{align*}
+
+The second half of the problem is to compute
+\begin{align*}
+  \text{argmax}_{i,j}\left|\pfrac{E}{W^{(1)}_{i,j}}\right|
+\end{align*}
+
+
+\end{document}
